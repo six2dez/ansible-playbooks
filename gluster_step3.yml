@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+    - name: edit fstab to add bricks
+      shell:
+        cmd: |
+          echo "/dev/sda1 /bricks/brick1 xfs defaults 1 2" >> /etc/fstab;
+          mount -a && mount
+        executable: /bin/bash

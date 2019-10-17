@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+    - name: Make sure a service is running
+      systemd: state=started name=cockpit.socket

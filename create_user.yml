@@ -1,0 +1,10 @@
+---
+- hosts:             all
+  remote_user:       root
+  tasks:
+    - name: Add the user 'gitlab-runner' with a bash shell
+      user:
+        name: gitlab-runner
+        shell: /bin/bash
+        groups: docker
+        append: yes

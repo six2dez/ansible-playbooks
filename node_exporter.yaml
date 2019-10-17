@@ -1,0 +1,48 @@
+---
+- hosts: all
+  remote_user: root
+  vars:
+    node_exporter_version: 0.16.0
+  tasks:
+    - name: test connection
+      ping:
+    - name: create group
+      group:
+        name: prometheus
+        state: present
+    - name: create user
+      user:
+        name: prometheus
+        group: prometheus
+        createhome: no
+        system: yes
+        state: present
+    - name: download node exporter
+      get_url:
+        url: https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+        dest: /opt/prometheus
+    - name: create opt directory for prometheus
+      file:
+        path: /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64
+        owner: prometheus
+        group: prometheus
+        state: directory
+    - name: Extract node exporter
+      shell: tar -xzf /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz -C /opt/prometheus/
+      args:
+        executable: /bin/bash
+    - name: create symlink to node exporter
+      file:
+        path: /usr/bin/node_exporter
+        state: link
+        src: /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter
+    - name: install unit file to systemd
+      template:
+        src: ~/Documentos/personal/ansible-playbooks/files_monit/node_exporter.service
+        dest: /etc/systemd/system/node_exporter.service
+    - name: configure systemd to use service
+      systemd:
+        daemon_reload: yes
+        enabled: yes
+        state: started
+        name: node_exporter.service

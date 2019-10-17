@@ -1,0 +1,40 @@
+---
+- hosts:             all
+  remote_user:       root
+  vars:
+    doc_root: /var/www/html
+  tasks:
+    - name:          Install yum plugins
+      yum:
+        name:        yum-plugin-priorities
+        state:       latest
+    - name:          Install EPEL release
+      yum:
+        name:        epel-release
+        state:       latest
+    - name: install system updates
+      yum: update_cache=yes name=* state=latest update_cache=yes
+    - name:          install Apache
+      yum:
+        name:        httpd
+        state:       latest
+    - name:          install 'Dev tools'
+      yum:
+        name:        "@Development tools"
+        state:       latest
+    - name: install basic packages
+      action: >
+        {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+      with_items:
+        - vim
+        - vim-enhanced
+        - tmux
+        - net-tools
+        - yum-utils
+        - xfsprogs 
+        - xfsdump
+        - samba
+        - wget
+        - unzip
+        - tar
+        - docker-compose

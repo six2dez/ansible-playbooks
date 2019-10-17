@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+    - name: Creates folder for brick1
+      file: path=/bricks/brick1 state=directory
+      recurse: yes

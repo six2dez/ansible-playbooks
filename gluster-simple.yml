@@ -1,0 +1,25 @@
+---
+- hosts: all
+  tasks:
+    - name: install gluster release
+      yum:        
+        name: centos-release-gluster
+        state:      latest
+    - name: Creates folder for brick1
+      file: path=/bricks/brick1 state=directory
+      recurse: yes
+    - name: edit fstab to add bricks
+      shell:
+        cmd: |
+          echo "/dev/sda1 /bricks/brick1 xfs defaults 1 2" >> /etc/fstab;
+          mount -a && mount
+        executable: /bin/bash
+    - name: install glusterfs-server
+      yum:        
+        name: glusterfs-server
+        state:      latest
+    - name: enable glusterfs daemon
+      systemd:
+        name:       glusterd
+        state:      started
+        enabled:    True

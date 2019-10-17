@@ -1,0 +1,8 @@
+---
+- hosts: all
+  remote_user: root
+  tasks:
+  - name: Run a command
+    shell: systemctl enable --now cockpit.socket
+    args:
+      executable: /bin/bash

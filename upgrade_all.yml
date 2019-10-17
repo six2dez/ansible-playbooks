@@ -1,0 +1,11 @@
+---
+ 
+- hosts: all
+  remote_user: root
+  tasks:
+    # This task updates servers that use 'yum' and RPM packages
+    # by looking for CentOS or RedHat as a distribution name. This
+    # will may also pick up modern OracleLinux but OL has a lot of
+    # different strings.
+    - name: .rpm upgrade server
+      yum: update_cache=yes name=* state=latest update_cache=yes

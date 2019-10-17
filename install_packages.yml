@@ -1,0 +1,11 @@
+---
+- hosts:             all
+  remote_user:       root
+  vars:
+    doc_root: /var/www/html
+  tasks:
+    - name: install basic packages
+      action: >
+        {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+      with_items:
+        - cockpit

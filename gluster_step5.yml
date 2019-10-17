@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+    - name: enable glusterfs daemon
+      systemd:
+        name:       glusterd
+        state:      started
+        enabled:    True

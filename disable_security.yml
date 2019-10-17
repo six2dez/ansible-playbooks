@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: disable selinux
+      selinux:
+        state: disabled
+    - name: disable firewall
+      systemd:
+        name: firewalld
+        enabled: no
+        masked: no

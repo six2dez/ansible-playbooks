@@ -1,0 +1,8 @@
+---
+- hosts: all
+  remote_user: root
+  tasks:
+  - name: Netdata
+    shell: bash <(curl -Ss https://my-netdata.io/kickstart.sh) all  --dont-wait --non-interactive
+    args:
+      executable: /bin/bash

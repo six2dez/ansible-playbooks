@@ -1,0 +1,11 @@
+---
+- hosts: all
+  remote_user: root
+  tasks:
+  - name: example copying file with owner and permissions
+    copy:
+      src: ~/Documents/ansible-playbooks/files_monit/prometheus.yml
+      dest: /etc/prometheus.yml
+      owner: root
+      group: root
+      mode: 0777

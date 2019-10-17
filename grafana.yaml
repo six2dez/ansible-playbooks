@@ -1,0 +1,29 @@
+---
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: download grafana
+      get_url:
+        url: https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-5.2.2-1.x86_64.rpm
+        dest: /root/
+    - name: install basic dependencies
+      action: >
+        {{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes
+      with_items:
+        - initscripts
+        - fontconfig
+        - urw-fonts
+    - name: install ansible rpm from a local file
+      yum:
+        name: /root/grafana-5.2.2-1.x86_64.rpm
+        state: present
+    - name: configure systemd to use service
+      systemd:
+        daemon_reload: yes
+        enabled: yes
+        state: started
+        name: grafana-server
+    - name: Extract Prometheus in opt
+      shell: /sbin/chkconfig --add grafana-server && systemctl daemon-reload && systemctl start grafana-server
+      args:
+        executable: /bin/bash
